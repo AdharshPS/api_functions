@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:model_scample/appUtils/appUtils.dart';
 import 'package:model_scample/model/details_model.dart';
 
 class HomeScreenController with ChangeNotifier {
@@ -9,7 +10,7 @@ class HomeScreenController with ChangeNotifier {
   Map<String, dynamic> decodeData = {};
 
   Future getData() async {
-    final url = Uri.parse("http://3.92.68.133:8000/api/addemployee/");
+    final url = Uri.parse("${AppUtils.baseURL}/api/addemployee/");
     final response = await http.get(url);
 
     print(response.statusCode);
@@ -25,7 +26,7 @@ class HomeScreenController with ChangeNotifier {
   }
 
   Future postData({required String empName, required String des}) async {
-    final url = Uri.parse("http://3.92.68.133:8000/api/addemployee/");
+    final url = Uri.parse("${AppUtils.baseURL}/api/addemployee/");
     final response = await http.post(url, body: {
       "employee_name": empName,
       "designation": des,
@@ -42,7 +43,7 @@ class HomeScreenController with ChangeNotifier {
   }
 
   Future deleteData({required String? id}) async {
-    final url = Uri.parse("http://3.92.68.133:8000/api/addemployee/$id/");
+    final url = Uri.parse("${AppUtils.baseURL}/api/addemployee/$id/");
     final response = await http.delete(url);
 
     print(response.statusCode);
@@ -62,7 +63,7 @@ class HomeScreenController with ChangeNotifier {
       {required String empName,
       required String des,
       required String id}) async {
-    final url = Uri.parse("http://3.92.68.133:8000/api/addemployee/$id/");
+    final url = Uri.parse("${AppUtils.baseURL}/api/addemployee/$id/");
     final response = await http.put(url, body: {
       "employee_name": empName,
       "designation": des,
