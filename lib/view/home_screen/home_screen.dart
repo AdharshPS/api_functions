@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:model_scample/controller/home_screen_controller.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,13 +11,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeScreenController homeScreen = HomeScreenController();
+  // HomeScreenController homeScreen = HomeScreenController();
 
   Future<void> fetchData() async {
-    setState(() {});
-    await homeScreen.getData();
-    setState(() {});
-    // await Provider.of<HomeScreenController>(context, listen: false).getData();
+    // setState(() {});
+    // await homeScreen.getData();
+    // setState(() {});
+    await Provider.of<HomeScreenController>(context, listen: false).getData();
   }
 
   @override
@@ -33,11 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final details = Provider.of<HomeScreenController>(context);
+    final details = Provider.of<HomeScreenController>(context);
     return Scaffold(
       appBar: AppBar(),
       body: ListView.builder(
-        itemCount: homeScreen.detailsModel.employees?.length,
+        itemCount: details.detailsModel.employees?.length,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.only(top: 10, left: 10, right: 10),
           child: Container(
@@ -51,12 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      homeScreen.detailsModel.employees?[index].employeeName ??
-                          "",
+                      details.detailsModel.employees?[index].employeeName ?? "",
                     ),
                     Text(
-                      homeScreen.detailsModel.employees?[index].designation ??
-                          "",
+                      details.detailsModel.employees?[index].designation ?? "",
                     ),
                   ],
                 ),
@@ -64,10 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     IconButton(
                         onPressed: () async {
-                          titleData.text = homeScreen.detailsModel
+                          titleData.text = details.detailsModel
                                   .employees?[index].employeeName ??
                               "";
-                          desData.text = homeScreen
+                          desData.text = details
                                   .detailsModel.employees?[index].designation ??
                               "";
                           itemIndex = index;
@@ -78,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 10),
                     IconButton(
                         onPressed: () async {
-                          await homeScreen.deleteData(
-                            id: homeScreen.detailsModel.employees?[index].id,
+                          await details.deleteData(
+                            id: details.detailsModel.employees?[index].id,
                           );
                           setState(() {});
                         },
@@ -135,15 +133,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: () async {
                 isEditing == false
-                    ? await homeScreen.postData(
+                    ? await Provider.of<HomeScreenController>(context,
+                            listen: false)
+                        .postData(
                         empName: titleData.text.trim(),
                         des: desData.text.trim(),
                       )
-                    : await homeScreen.updateData(
-                        empName: titleData.text,
-                        des: desData.text,
-                        id: homeScreen.detailsModel.employees?[itemIndex].id ??
-                            "");
+                    : await Provider.of<HomeScreenController>(context,
+                            listen: false)
+                        .updateData(
+                            empName: titleData.text,
+                            des: desData.text,
+                            id: Provider.of<HomeScreenController>(context,
+                                        listen: false)
+                                    .detailsModel
+                                    .employees?[itemIndex]
+                                    .id ??
+                                "");
                 Navigator.pop(context);
                 setState(() {});
                 titleData.clear();
